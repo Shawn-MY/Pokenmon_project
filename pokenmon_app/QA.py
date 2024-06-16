@@ -11,7 +11,6 @@ import ssl
 
 class Document_Q_And_A:
 
-
     def __init__(self, APPId, APISecret, TimeStamp, OriginUrl):
         self.appId = APPId
         self.apiSecret = APISecret
@@ -136,8 +135,11 @@ def run(ws, *args):
     data = json.dumps(ws.question)
     ws.send(data)
 
+
 answer = []
 is_complete = False
+
+
 # 收到websocket消息的处理
 def on_message(ws, message):
     """
@@ -167,7 +169,7 @@ def on_message(ws, message):
 def getAnswer():
     return ''.join(answer)
 
+
 def clearAnswer():
     global answer
     answer = []
-

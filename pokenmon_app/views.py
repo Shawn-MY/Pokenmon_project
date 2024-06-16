@@ -3,17 +3,7 @@ from django.http import HttpResponse, JsonResponse
 # from QA import QA
 import time 
 # -*- coding:utf-8 -*-
-import hashlib
-import base64
-import hmac
-import time
-import json
-import websocket
-import _thread as thread
-import ssl
-from .QA import Document_Q_And_A
-from .QA import on_message
-from .QA import on_open
+
 from .QA import *
 
 
