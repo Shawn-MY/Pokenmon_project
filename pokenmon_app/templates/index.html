@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Form</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script type="text/javascript">
+        let intervalId;
+
+        function fetchResult() {
+            $.ajax({
+                url: '/get_result/',
+                method: 'GET',
+                success: function(data) {
+                    $('#result').text(data.result);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            $('form').submit(function(event) {
+                event.preventDefault();
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: $(this).serialize(),
+                    success: function() {
+                        intervalId = setInterval(fetchResult, 200);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <h1>!Pokenmon!</h1>
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="input_value" placeholder="Enter something...">
+        <button type="submit">提问</button>
+    </form>
+    <p>Pokemon Expert Answer： <span id="result"></span></p>
+</body>
+</html>
