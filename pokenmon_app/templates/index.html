@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>与宝可梦专家聊天</title>
+    <title>与宝可梦博士聊天</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -103,7 +103,9 @@ function fetchResult() {
 $(document).ready(function() {
     $('form').submit(function(event) {
         event.preventDefault();
-        let inputValue = $('input[name="input_value"]').val();
+		var inputElem = 'input[name="input_value"]'
+        let inputValue = $(inputElem).val();
+		$(inputElem).val("")
 
         // Append user question to result div
         $('#result').append('<div><strong>你:</strong> ' + inputValue + '</div>');
