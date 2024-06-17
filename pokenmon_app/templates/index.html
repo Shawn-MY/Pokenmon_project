@@ -3,43 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Input Form</title>
+    <title>与宝可梦专家聊天</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 28px;
+            color: #333;
+        }
+        form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            outline: none;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            outline: none;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            background: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            min-height: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        #result p {
+            margin: 10px 0;
+            padding: 5px 10px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+        }
+        #result p strong {
+            color: #007bff;
+        }
+    </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-        let intervalId;
+   let intervalId;
 
-        function fetchResult() {
-            $.ajax({
-                url: '/get_result/',
-                method: 'GET',
-                success: function(data) {
-                    $('#result').text(data.result);
-                }
-            });
+function fetchResult() {
+    $.ajax({
+        url: '/get_result/',
+        method: 'GET',
+        success: function(data) {
+            let answer = data.result;
+
+            // Append the answer to the result div
+            $('#result').append('<div><strong>Pokemon Expert:</strong> ' + answer + '</div>');
+
+            // Scroll to the bottom of the result div (optional)
+            $('#result').scrollTop($('#result')[0].scrollHeight);
+
+            // Clear the interval to stop fetching results
+            clearInterval(intervalId);
         }
+    });
+}
 
-        $(document).ready(function() {
-            $('form').submit(function(event) {
-                event.preventDefault();
-                $.ajax({
-                    url: '',
-                    type: 'POST',
-                    data: $(this).serialize(),
-                    success: function() {
-                        intervalId = setInterval(fetchResult, 200);
-                    }
-                });
-            });
+$(document).ready(function() {
+    $('form').submit(function(event) {
+        event.preventDefault();
+        let inputValue = $('input[name="input_value"]').val();
+
+        // Append user question to result div
+        $('#result').append('<div><strong>You:</strong> ' + inputValue + '</div>');
+
+        $.ajax({
+            url: '',
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function() {
+                intervalId = setInterval(fetchResult, 200);
+            }
         });
+    });
+});
+
     </script>
 </head>
 <body>
-    <h1>!Pokenmon!</h1>
-    <form method="post">
-        {% csrf_token %}
-        <input type="text" name="input_value" placeholder="Enter something...">
-        <button type="submit">提问</button>
-    </form>
-    <p>Pokemon Expert Answer： <span id="result"></span></p>
+    <div class="container">
+        <h1>与宝可梦专家聊天</h1>
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="input_value" placeholder="请输入您的问题...">
+            <button type="submit">提问</button>
+        </form>
+        <div id="result"></div>
+    </div>
 </body>
 </html>
