@@ -13,10 +13,10 @@
             padding: 20px;
         }
 		.one_line {
-			display: inline-block
+			display: inline-block;
 		}
 		.iconed_title {
-			text-align: center
+			text-align: center;
 		}
         .container {
             max-width: 800px;
@@ -28,6 +28,7 @@
             padding: 20px;
         }
         h1 {
+			font-weight:bold;
             text-align: center;
             font-size: 28px;
             color: #8B4513;
@@ -105,7 +106,6 @@ $(document).ready(function() {
         event.preventDefault();
 		var inputElem = 'input[name="input_value"]'
         let inputValue = $(inputElem).val();
-		$(inputElem).val("")
 
         // Append user question to result div
         $('#result').append('<div><strong>你:</strong> ' + inputValue + '</div>');
@@ -118,6 +118,8 @@ $(document).ready(function() {
                 intervalId = setInterval(fetchResult, 200);
             }
         });
+		
+		$(inputElem).val("");
     });
 });
 
