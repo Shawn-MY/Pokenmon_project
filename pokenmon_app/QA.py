@@ -98,7 +98,7 @@ class Document_Q_And_A:
         data = {
             # 非必要
             "chatExtends": {
-                "wikiPromptTpl": "请将以下内容作为已知信息：\n<wikicontent>\n请根据以上内容回答用户的问题。\n问题:<wikiquestion>\n回答:",
+                "wikiPromptTpl": "请将以下内容作为已知信息：\n<wikicontent>\n请根据以上内容直接回答用户的问题，不要带有“根据提供的信息”这样的词。\n问题:<wikiquestion>\n回答:",
                 "wikiFilterScore": 0.83,
                 "temperature": 0.5
             },
