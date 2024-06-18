@@ -1,10 +1,19 @@
+from threading import Thread
+
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 # from QA import QA
-import time 
+import time
 # -*- coding:utf-8 -*-
 
 from .QA import *
+
+
+def websocket_thread(wsUrl, body, APPId):
+    ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_open=on_open)
+    ws.appid = APPId
+    ws.question = body
+    ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
 
 
 def index(request):
@@ -24,16 +33,13 @@ def index(request):
         wsUrl = document_Q_And_A.get_url()
         body = document_Q_And_A.get_body()
 
-        # 禁用WebSocket库的跟踪功能，使其不再输出详细的调试信息。
-        websocket.enableTrace(False)
-        ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_open=on_open)
-        ws.appid = APPId
-        ws.question = body
-        ws.messages = []
-        ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
+        # 启动 WebSocket 线程
+        thread = Thread(target=websocket_thread, args=(wsUrl, body, APPId))
+        thread.start()
+
         return render(request, 'index.html')
     return render(request, 'index.html')
 
 
 def get_result(request):
-    return JsonResponse({'result': getAnswer(),'stop':is_complete})
+    return JsonResponse({'result': getAnswer(), 'stop': is_complete})

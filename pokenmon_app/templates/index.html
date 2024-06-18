@@ -67,22 +67,24 @@
             max-height: 400px;
             overflow-y: auto;
         }
-        #result p {
+
+        #result div {
             margin: 10px 0;
             padding: 5px 10px;
             background: #fff;
             border-radius: 4px;
             box-shadow: 0 2px 2px rgba(0,0,0,0.1);
         }
-        #result p strong {
+        #result div strong {
             color: #007bff;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="text/javascript">
-   let intervalId;
 
-function fetchResult() {
+let answerIntervals = [];
+
+function fetchResult(resultDiv, questionIndex) {
     $.ajax({
         url: '/get_result/',
         method: 'GET',
@@ -90,13 +92,12 @@ function fetchResult() {
             let answer = data.result;
 
             // Append the answer to the result div
-            $('#result').append('<div><strong>宝可梦博士:</strong> ' + answer + '</div>');
+            $(resultDiv).html('<strong>宝可梦博士:</strong> ' + answer);
 
-            // Scroll to the bottom of the result div (optional)
-            $('#result').scrollTop($('#result')[0].scrollHeight);
-
-            // Clear the interval to stop fetching results
-            clearInterval(intervalId);
+            // Clear the interval to stop fetching results if the answer is complete (optional)
+            // if (answerIsComplete(answer)) {
+            //     clearInterval(answerIntervals[questionIndex]);
+            // }
         }
     });
 }
@@ -108,18 +109,30 @@ $(document).ready(function() {
         let inputValue = $(inputElem).val();
 
         // Append user question to result div
-        $('#result').append('<div><strong>你:</strong> ' + inputValue + '</div>');
+        $('#result').append('<div><strong>You:</strong> ' + inputValue + '</div><div class="answer"></div>');
+
+        let resultDiv = $('#result .answer').last();
+        let questionIndex = answerIntervals.length;
+
+        // Clear previous intervals to fix the answers
+        for (let i = 0; i < answerIntervals.length; i++) {
+            clearInterval(answerIntervals[i]);
+        }
 
         $.ajax({
             url: '',
             type: 'POST',
             data: $(this).serialize(),
             success: function() {
-                intervalId = setInterval(fetchResult, 200);
+                let intervalId = setInterval(function() {
+                    fetchResult(resultDiv, questionIndex);
+                }, 200);
+
+                // Store the interval ID
+                answerIntervals.push(intervalId);
             }
         });
-		
-		$(inputElem).val("");
+
     });
 });
 
@@ -139,7 +152,10 @@ $(document).ready(function() {
             <input type="text" name="input_value" placeholder="请输入您的问题...">
             <button type="submit">提问</button>
         </form>
-        <div id="result"></div>
+
+        <div id="result">
+
+        </div>
     </div>
 </body>
 </html>
