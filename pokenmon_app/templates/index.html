@@ -97,11 +97,11 @@ function fetchResult(resultDiv, questionIndex) {
 
             // Append the answer to the result div
             $(resultDiv).html('<strong>宝可梦博士:</strong> ' + answer);
-
+            console.log(questionIndex)
             // Clear the interval to stop fetching results if the answer is complete (optional)
-            // if (answerIsComplete(answer)) {
-            //     clearInterval(answerIntervals[questionIndex]);
-            // }
+            if (data.stop) {
+                clearInterval(answerIntervals[questionIndex]);
+            }
         }
     });
 }
@@ -121,6 +121,7 @@ $(document).ready(function() {
         // Clear previous intervals to fix the answers
         for (let i = 0; i < answerIntervals.length; i++) {
             clearInterval(answerIntervals[i]);
+
         }
 
         $.ajax({
@@ -130,7 +131,7 @@ $(document).ready(function() {
             success: function() {
                 let intervalId = setInterval(function() {
                     fetchResult(resultDiv, questionIndex);
-                }, 200);
+                }, 100);
 
                 // Store the interval ID
                 answerIntervals.push(intervalId);

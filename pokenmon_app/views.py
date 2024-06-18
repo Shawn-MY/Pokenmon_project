@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 # from QA import QA
 import time
+
+from . import QA
 # -*- coding:utf-8 -*-
 
 from .QA import *
@@ -20,6 +22,7 @@ def index(request):
     if request.method == 'POST':
         # 每次提问清空上次的回答
         clearAnswer()
+        start()
         input_value = request.POST.get('input_value')
         print(input_value)
         APPId = "00d517ef"
@@ -42,4 +45,5 @@ def index(request):
 
 
 def get_result(request):
-    return JsonResponse({'result': getAnswer(), 'stop': is_complete})
+    print(QA.is_complete)
+    return JsonResponse({'result': getAnswer(), 'stop': QA.is_complete})

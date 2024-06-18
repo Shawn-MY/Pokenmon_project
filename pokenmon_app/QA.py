@@ -164,6 +164,8 @@ def on_message(ws, message):
 
         if status == 2:
             ws.close()
+            is_complete = True
+            print("关闭啦")
 
 
 def getAnswer():
@@ -173,3 +175,13 @@ def getAnswer():
 def clearAnswer():
     global answer
     answer = []
+
+
+def get_iscomplete():
+    global is_complete
+    return is_complete
+
+
+def start():
+    global is_complete
+    is_complete = False
