@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,9 +9,12 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f2f2f2;
             margin: 0;
             padding: 20px;
+            background-image: url("{% static 'img/bg.jpeg' %}");
+            background-color: rgba(255, 255, 255, 0.6);
+            background-blend-mode: overlay;
+			background-size: cover;
         }
 		.one_line {
 			display: inline-block;
@@ -76,7 +80,7 @@
             box-shadow: 0 2px 2px rgba(0,0,0,0.1);
         }
         #result div strong {
-            color: #007bff;
+            color: #FF8C00;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -109,7 +113,7 @@ $(document).ready(function() {
         let inputValue = $(inputElem).val();
 
         // Append user question to result div
-        $('#result').append('<div><strong>You:</strong> ' + inputValue + '</div><div class="answer"></div>');
+        $('#result').append('<div><strong>你:</strong> ' + inputValue + '</div><div class="answer"></div>');
 
         let resultDiv = $('#result .answer').last();
         let questionIndex = answerIntervals.length;
